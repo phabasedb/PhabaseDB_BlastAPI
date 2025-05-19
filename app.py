@@ -33,6 +33,14 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
             "-out", out_path
         ]
 
+        if blast_type.lower() == "blastn":
+            cmd.extend([
+                "-reward",  "2",
+                "-penalty", "-3",
+                "-gapopen",  "5",
+                "-gapextend","2"
+            ])
+        
         if params:
             cmd.extend(params.split())
 

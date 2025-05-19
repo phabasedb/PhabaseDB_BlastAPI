@@ -15,44 +15,41 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
 
         query_path = os.path.join(tmpdir, "query.fa")
         out_path   = os.path.join(tmpdir, "result.html")
-
+        
         with open(query_path, "w") as f:
             f.write(sequence)
 
-        if dbs:
-            db_string = " ".join(f"/blast/blastdb/{d}" for d in dbs)
-            db_args = ["-db", db_string]
-        else:
-            db_args = []
+        db_args = []
+        for d in dbs:
+            db_args += ["-db", f"/blast/blastdb/{d}"]
 
         cmd = [
             blast_type,
             "-html",
             "-query", query_path,
             *db_args,
-            "-out", out_path
         ]
 
         if blast_type.lower() == "blastn":
-            cmd.extend([
-                "-reward",  "2",
-                "-penalty", "-3",
-                "-gapopen",  "5",
-                "-gapextend","2"
-            ])
-        
+            cmd += [
+                "-reward",   "2",
+                "-penalty",  "-3",
+                "-gapopen",   "5",
+                "-gapextend", "2",
+            ]
+
         if params:
-            cmd.extend(params.split())
+            cmd += params.split()
+
+        cmd += ["-out", out_path]
 
         try:
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as e:
-            return f"{blast_type} falló: {e}", 500
+            return f"{blast_type} failed: {e}", 500
 
         with open(out_path, "r") as hf:
-            blast_html = hf.read()
-
-        return Response(blast_html, mimetype="text/html")
+            return Response(hf.read(), mimetype="text/html")
 
 @app.route("/blastn", methods=["POST"])
 def blastn():

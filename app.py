@@ -19,9 +19,11 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
         with open(query_path, "w") as f:
             f.write(sequence)
 
-        db_args = []
-        for d in dbs:
-            db_args += ["-db", f"/blast/blastdb/{d}"]
+        if dbs:
+            db_string = " ".join(f"/blast/blastdb/{d}" for d in dbs)
+            db_args = ["-db", db_string]
+        else:
+            db_args = []
 
         cmd = [
             blast_type,

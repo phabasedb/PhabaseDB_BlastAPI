@@ -50,7 +50,8 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
             return jsonify({"status":"error", "message": "Unable to process the sequence temporarily. Please try again."}), 500
 
         db_string = " ".join(f"/blast/blastdb/{db}" for db in dbs)
-        cmd = [blast_type, "-xml", "-query", query_path, "-db", db_string]
+        #cmd = [blast_type, "-outfmt", "5", "-query", query_path, "-db", db_string]
+        cmd = [blast_type, "-html", "-query", query_path, "-db", db_string]
         if blast_type.lower() == "blastn":
             cmd.extend(["-reward", "2", "-penalty", "-3", "-gapopen", "5", "-gapextend", "2"])
         if params:
@@ -72,4 +73,5 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
             return jsonify({"status":"error", "message": f"BLAST failure: {error_msg}"}), 500
 
         html_output = result.stdout
-        return Response(html_output, status=200, mimetype="text/xml")
+        #return Response(html_output, status=200, mimetype="text/xml")
+        return Response(html_output, status=200, mimetype="text/html")

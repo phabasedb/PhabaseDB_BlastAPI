@@ -30,7 +30,6 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
         has_pin = os.path.exists(path_db + ".pin")
         if not (has_nin or has_pin):
             missing_dbs.append(db)
-        return missing_dbs
     
     if missing_dbs:
         if len(missing_dbs) == 1:
@@ -52,7 +51,8 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
         except OSError:
             return jsonify({"status":"error", "message": "Unable to process the sequence temporarily. Please try again."}), 500
 
-        db_string = " ".join(f"/blast/blastdb/{db}" for db in dbs)
+        db_paths = [os.path.join(BASE_DIR, db) for db in dbs]
+        db_string = " ".join(db_paths)
         #cmd = [blast_type, "-outfmt", "5", "-query", query_path, "-db", db_string]
         cmd = [blast_type, "-html", "-query", query_path, "-db", db_string]
         if blast_type.lower() == "blastn":

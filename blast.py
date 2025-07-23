@@ -2,7 +2,7 @@ import subprocess
 import tempfile
 import os
 from flask import jsonify, Response
-from constants import VALID_PARAMS
+from constants import VALID_PARAMS, BASE_DIR
 from utils import normalize_fasta
 
 def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
@@ -25,9 +25,12 @@ def run_blast(blast_type: str, sequence: str, dbs: list, params: str):
     
     missing_dbs = []
     for db in dbs:
-        ruta = f"/blast/blastdb/{db}"
-        if not (os.path.exists(ruta + ".nin") or os.path.exists(ruta + ".pin")):
+        path_db = os.path.join(BASE_DIR, db)
+        has_nin = os.path.exists(path_db + ".nin")
+        has_pin = os.path.exists(path_db + ".pin")
+        if not (has_nin or has_pin):
             missing_dbs.append(db)
+        return missing_dbs
     
     if missing_dbs:
         if len(missing_dbs) == 1:

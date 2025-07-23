@@ -14,7 +14,8 @@ This project wraps NCBI’s BLAST+ command‑line tools (`blastn` and `blastp`) 
 
 1. **Python 3.8+**
 2. **Flask**
-3. **NCBI BLAST+** installed and available in your `PATH` (`blastn`, `blastp`, etc.)
+3. **Gunicorn**
+4. **NCBI BLAST+** installed and available in your `PATH` (`blastn`, `blastp`, etc.)
 
 ## Project Structure & Data Organization
 

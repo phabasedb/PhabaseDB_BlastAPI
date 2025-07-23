@@ -43,17 +43,17 @@ project-root/
 - **Response output**
   - By default it returns HTML, but you can set the output to XML, JSON, etc.
 
-> **Tip**: If your DB directory is in a different location, edit the path in `blast.py` (the `ruta` variable).
+> **Tip**: If your DB directory is in a different location, edit the path in `constants.py` (the `BASE_DIR` variable).
 
 ```bash
-ruta = f"/blast/blastdb/{db}"
+BASE_DIR = '/blast/blastdb/'
 ```
 
 ## Configuration Notes
 
 - Database directory
 
-  Edit the ruta variable in blast.py or define your own BLASTDB_DIR environment variable.
+  Edit the ruta variable in `constants.py` or define your own `BASE_DIR` environment variable.
 
 - Timeout and parameters
 
